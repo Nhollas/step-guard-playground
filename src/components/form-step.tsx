@@ -4,8 +4,8 @@ import { ReactNode } from "react"
 import { UseFormReturn } from "react-hook-form"
 import { Schema, z } from "zod"
 import { BottomNavigation } from "./bottom-navigation"
-import { useJourneyStep, UseJourneyStepProps } from "@/hooks/useJourneyStep"
-import { useStepTransition } from "@/hooks/useStepTransition"
+import { useJourneyStep, UseJourneyStepProps } from "@/hooks/use-journey-step"
+import { useStepNavigation } from "@/hooks/use-step-navigation"
 
 export interface JourneyFormStepProps<T extends Schema>
   extends UseJourneyStepProps<T> {
@@ -22,18 +22,22 @@ export function JourneyFormStep<T extends z.Schema>({
   } = form
   const { nextStepPathname } = props
 
-  const isSubmitting = useStepTransition(isFormSubmitting, nextStepPathname)
+  const { isSubmitting, previousStepPathname } = useStepNavigation(
+    isFormSubmitting,
+    nextStepPathname,
+  )
 
   return (
     <Form {...form}>
       <form
-        className={cn(
-          "grid grid-cols-1 tablet:grid-cols-2 w-full gap-48 max-w-md tablet:max-w-4xl desktop:max-w-7xl mx-auto",
-        )}
+        className={cn("grid gap-16 w-full max-w-md mx-auto")}
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {render(form)}
-        <BottomNavigation isSubmitting={isSubmitting} />
+        <BottomNavigation
+          isSubmitting={isSubmitting}
+          previousStepPathname={previousStepPathname}
+        />
       </form>
     </Form>
   )

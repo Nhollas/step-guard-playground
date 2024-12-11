@@ -25,14 +25,14 @@ export async function middleware(request: NextRequest) {
     if (!progress.includes(stepPathname)) {
       return redirectToPreviousValidStep(progress, request.url)
     }
+
+    return NextResponse.next()
   } catch (e) {
     console.error("Error occurred in Middleware:", e)
 
     // Something went wrong, restart the users progress.
     return await redirectToStartWithFreshProgress(cookieStore, request.url)
   }
-
-  return NextResponse.next()
 }
 
 async function redirectToStartWithFreshProgress(

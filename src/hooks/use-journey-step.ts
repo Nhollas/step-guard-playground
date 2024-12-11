@@ -1,5 +1,5 @@
 "use client"
-import { moveJourneyProgress } from "@/actions/moveJourneyProgress"
+import { advanceJourneyStep } from "@/actions/advanceJourneyStep"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -30,7 +30,7 @@ export function useJourneyStep<T extends z.Schema>({
 
   const onSubmit = async () => {
     if (nextStepPathname) {
-      await moveJourneyProgress(nextStepPathname)
+      await advanceJourneyStep(nextStepPathname)
 
       router.push(nextStepPathname)
     }

@@ -1,7 +1,8 @@
+import { JOURNEY_STEPS_ORDERED } from "@/config/journey-steps"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
-export function useStepTransition(
+export function useStepNavigation(
   isFormSubmitting: boolean,
   nextStepPathname?: string,
 ) {
@@ -20,5 +21,14 @@ export function useStepTransition(
     }
   }, [isNavigating, nextStepPathname, pathname])
 
-  return isFormSubmitting || isNavigating
+  const currentStepIndex = JOURNEY_STEPS_ORDERED.indexOf(pathname)
+  const previousStepPathname =
+    currentStepIndex > 0
+      ? JOURNEY_STEPS_ORDERED[currentStepIndex - 1]
+      : undefined
+
+  return {
+    isSubmitting: isFormSubmitting || isNavigating,
+    previousStepPathname,
+  }
 }

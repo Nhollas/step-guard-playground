@@ -6,7 +6,7 @@ import {
 import { cookies } from "next/headers"
 import { PROGRESS_COOKIE_NAME } from "@/config/route-guards"
 
-export const moveJourneyProgress = async (nextStep: string) => {
+export const advanceJourneyStep = async (nextStep: string) => {
   const cookieStore = await cookies()
   const currentProgress = cookieStore.get(PROGRESS_COOKIE_NAME)
 

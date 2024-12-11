@@ -1,5 +1,5 @@
 "use client"
-import { useRedirectAlert } from "../hooks/useRedirectAlert"
+import { useRedirectAlert } from "../hooks/use-redirect-alert"
 
 export function StepGuardToast() {
   useRedirectAlert()

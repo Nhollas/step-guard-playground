@@ -4,7 +4,7 @@ export const STEP_THREE = "/steps/three"
 export const STEP_FOUR = "/steps/four"
 export const STEP_FIVE = "/steps/five"
 
-export const STEPS_ORDERED = [
+export const JOURNEY_STEPS_ORDERED = [
   STEP_ONE,
   STEP_TWO,
   STEP_THREE,
