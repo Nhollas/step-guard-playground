@@ -13,31 +13,45 @@ import {
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
   const progressCookie = cookieStore.get(PROGRESS_COOKIE_NAME)
-  const step = request.nextUrl.pathname
-  console.log("Middleware Triggered!:", request.nextUrl.pathname)
-  console.log("You are on step:", step)
+  const stepPathname = request.nextUrl.pathname
 
-  if (!progressCookie) {
-    const progressToken = await encodeProgressToken([STEP_ONE])
-    cookieStore.set(PROGRESS_COOKIE_NAME, progressToken)
+  try {
+    if (!progressCookie) {
+      return await redirectToStartWithFreshProgress(cookieStore, request.url)
+    }
 
-    return NextResponse.redirect(new URL(STEP_ONE, request.url))
-  }
+    const progress = await decodeProgressToken(progressCookie.value)
 
-  const progress = await decodeProgressToken(progressCookie.value)
+    if (!progress.includes(stepPathname)) {
+      return redirectToPreviousValidStep(progress, request.url)
+    }
+  } catch (e) {
+    console.error("Error occurred in Middleware:", e)
 
-  console.log("Progress in middleware:", progress)
-
-  if (!progress.includes(step)) {
-    const lastAddedStep = progress.at(-1)
-
-    const redirectUrl = new URL(lastAddedStep, request.url)
-    redirectUrl.searchParams.append(GUARD_REDIRECT_REASON, "true")
-
-    return NextResponse.redirect(redirectUrl)
+    // Something went wrong, restart the users progress.
+    return await redirectToStartWithFreshProgress(cookieStore, request.url)
   }
 
   return NextResponse.next()
+}
+
+async function redirectToStartWithFreshProgress(
+  cookieStore: Awaited<ReturnType<typeof cookies>>,
+  baseUrl: string,
+) {
+  const progressToken = await encodeProgressToken([STEP_ONE])
+  cookieStore.set(PROGRESS_COOKIE_NAME, progressToken)
+
+  return NextResponse.redirect(new URL(STEP_ONE, baseUrl))
+}
+
+function redirectToPreviousValidStep(progress: string[], baseUrl: string) {
+  const lastValidStep = progress.at(-1) ?? STEP_ONE
+
+  const redirectUrl = new URL(lastValidStep, baseUrl)
+  redirectUrl.searchParams.append(GUARD_REDIRECT_REASON, "true")
+
+  return NextResponse.redirect(redirectUrl)
 }
 
 export const config = {
