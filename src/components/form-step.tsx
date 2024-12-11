@@ -5,6 +5,7 @@ import { UseFormReturn } from "react-hook-form"
 import { Schema, z } from "zod"
 import { BottomNavigation } from "./bottom-navigation"
 import { useJourneyStep, UseJourneyStepProps } from "@/hooks/useJourneyStep"
+import { useStepTransition } from "@/hooks/useStepTransition"
 
 export interface JourneyFormStepProps<T extends Schema>
   extends UseJourneyStepProps<T> {
@@ -17,8 +18,11 @@ export function JourneyFormStep<T extends z.Schema>({
 }: JourneyFormStepProps<T>) {
   const { form, onSubmit } = useJourneyStep({ ...props })
   const {
-    formState: { isSubmitting },
+    formState: { isSubmitting: isFormSubmitting },
   } = form
+  const { nextStepPathname } = props
+
+  const isSubmitting = useStepTransition(isFormSubmitting, nextStepPathname)
 
   return (
     <Form {...form}>

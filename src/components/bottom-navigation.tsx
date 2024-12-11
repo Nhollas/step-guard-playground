@@ -7,7 +7,9 @@ export const BottomNavigation = ({
 }) => {
   return (
     <div className="grid w-full max-w-md grid-cols-2 gap-x-20 tablet:col-span-2">
-      <Button type="submit">{isSubmitting ? "Loading..." : "Continue"}</Button>
+      <Button disabled={isSubmitting} type="submit">
+        {isSubmitting ? "Loading..." : "Continue"}
+      </Button>
     </div>
   )
 }

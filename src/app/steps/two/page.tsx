@@ -10,7 +10,7 @@ export default function PageComponent() {
   return (
     <JourneyFormStep
       schema={schema}
-      nextStepRoute={STEP_THREE}
+      nextStepPathname={STEP_THREE}
       render={() => <h1>Step Two</h1>}
     />
   )

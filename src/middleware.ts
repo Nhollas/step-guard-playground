@@ -13,7 +13,7 @@ import {
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
   const progressCookie = cookieStore.get(PROGRESS_COOKIE_NAME)
-  const [, , step] = request.nextUrl.pathname.split("/")
+  const step = request.nextUrl.pathname
   console.log("Middleware Triggered!:", request.nextUrl.pathname)
   console.log("You are on step:", step)
 
@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
     const progressToken = await encodeProgressToken([STEP_ONE])
     cookieStore.set(PROGRESS_COOKIE_NAME, progressToken)
 
-    return NextResponse.redirect(new URL(`/steps/${STEP_ONE}`, request.url))
+    return NextResponse.redirect(new URL(STEP_ONE, request.url))
   }
 
   const progress = await decodeProgressToken(progressCookie.value)
@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
   if (!progress.includes(step)) {
     const lastAddedStep = progress.at(-1)
 
-    const redirectUrl = new URL(`/steps/${lastAddedStep}`, request.url)
+    const redirectUrl = new URL(lastAddedStep, request.url)
     redirectUrl.searchParams.append(GUARD_REDIRECT_REASON, "true")
 
     return NextResponse.redirect(redirectUrl)

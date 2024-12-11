@@ -1,8 +1,8 @@
-export const STEP_ONE = "one"
-export const STEP_TWO = "two"
-export const STEP_THREE = "three"
-export const STEP_FOUR = "four"
-export const STEP_FIVE = "five"
+export const STEP_ONE = "/steps/one"
+export const STEP_TWO = "/steps/two"
+export const STEP_THREE = "/steps/three"
+export const STEP_FOUR = "/steps/four"
+export const STEP_FIVE = "/steps/five"
 
 export const STEPS_ORDERED = [
   STEP_ONE,
