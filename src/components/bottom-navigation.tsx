@@ -19,13 +19,12 @@ export const BottomNavigation = ({
     : "Finished"
 
   return (
-    <div className="grid w-full max-w-md grid-cols-2 gap-x-8 p-4 rounded-md bg-blue-500">
+    <div className="grid w-full grid-cols-2 gap-x-8 p-4 rounded-md bg-blue-500">
       <Button
         variant="secondary"
         type="button"
         disabled={!previousStepPathname}
         asChild={!!previousStepPathname}
-        className="disabled:pointer-events-none"
       >
         {previousStepPathname ? (
           <Link href={previousStepPathname}>Back</Link>
@@ -33,11 +32,7 @@ export const BottomNavigation = ({
           "Back"
         )}
       </Button>
-      <Button
-        disabled={isSubmitting || !nextStepPathname}
-        type="submit"
-        className="disabled:pointer-events-none"
-      >
+      <Button disabled={isSubmitting || !nextStepPathname} type="submit">
         {nextButtonText}
       </Button>
     </div>
