@@ -21,7 +21,7 @@ export function useJourneyStep<T extends z.Schema>({
   useEffect(() => {
     if (nextStepRoute) {
       router.prefetch(`/steps/${nextStepRoute}`, {
-        kind: PrefetchKind.TEMPORARY,
+        kind: PrefetchKind.FULL,
       })
     }
   }, [nextStepRoute, router])
