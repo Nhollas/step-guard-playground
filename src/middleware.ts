@@ -10,7 +10,7 @@ import {
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
   const progressCookie = cookieStore.get(PROGRESS_COOKIE_NAME)
-  const [_, __, step] = request.nextUrl.pathname.split("/")
+  const [, , step] = request.nextUrl.pathname.split("/")
   console.log("Middleware Triggered!:", request.nextUrl.pathname)
   console.log("You are on step:", step)
 
