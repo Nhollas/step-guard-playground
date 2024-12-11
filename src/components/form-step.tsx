@@ -37,6 +37,7 @@ export function JourneyFormStep<T extends z.Schema>({
         <BottomNavigation
           isSubmitting={isSubmitting}
           previousStepPathname={previousStepPathname}
+          nextStepPathname={nextStepPathname}
         />
       </form>
     </Form>

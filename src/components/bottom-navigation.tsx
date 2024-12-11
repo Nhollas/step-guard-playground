@@ -1,13 +1,23 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
+interface BottomNavigationProps {
+  isSubmitting: boolean
+  previousStepPathname?: string
+  nextStepPathname?: string
+}
+
 export const BottomNavigation = ({
   isSubmitting,
   previousStepPathname,
-}: {
-  isSubmitting: boolean
-  previousStepPathname?: string
-}) => {
+  nextStepPathname,
+}: BottomNavigationProps) => {
+  const nextButtonText = nextStepPathname
+    ? isSubmitting
+      ? "Loading..."
+      : "Continue"
+    : "Finished"
+
   return (
     <div className="grid w-full max-w-md grid-cols-2 gap-x-8 p-4 rounded-md bg-blue-500">
       <Button
@@ -22,8 +32,8 @@ export const BottomNavigation = ({
           "Back"
         )}
       </Button>
-      <Button disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Loading..." : "Continue"}
+      <Button disabled={isSubmitting || !nextStepPathname} type="submit">
+        {nextButtonText}
       </Button>
     </div>
   )
