@@ -38,5 +38,14 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/steps/:path*",
+  matcher: [
+    {
+      source: "/steps/:path*",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+      has: [{ type: "header", key: "sec-fetch-mode", value: "navigate" }],
+    },
+  ],
 }
