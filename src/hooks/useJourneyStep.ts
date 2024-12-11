@@ -1,6 +1,7 @@
 "use client"
 import { moveJourneyProgress } from "@/actions/moveJourneyProgress"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -19,7 +20,9 @@ export function useJourneyStep<T extends z.Schema>({
 
   useEffect(() => {
     if (nextStepRoute) {
-      router.prefetch(`/steps/${nextStepRoute}`)
+      router.prefetch(`/steps/${nextStepRoute}`, {
+        kind: PrefetchKind.TEMPORARY,
+      })
     }
   }, [nextStepRoute, router])
 
