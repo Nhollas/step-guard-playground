@@ -5,7 +5,7 @@ const { PROGRESS_TOKEN_SECRET } = env
 export async function encodeProgressToken(progress: string[]) {
   const progressString = JSON.stringify(progress)
   const encodedProgress = btoa(progressString)
-  const hash = await generateHash(encodedProgress, PROGRESS_TOKEN_SECRET)
+  const hash = await generateHash(encodedProgress)
   return `${encodedProgress}.${hash}`
 }
 
@@ -14,7 +14,7 @@ export async function decodeProgressToken(token: string) {
   if (!encodedProgress || !hash) {
     throw new Error("Invalid token")
   }
-  const validHash = await generateHash(encodedProgress, PROGRESS_TOKEN_SECRET)
+  const validHash = await generateHash(encodedProgress)
   if (hash !== validHash) {
     throw new Error("Invalid token")
   }
@@ -22,8 +22,8 @@ export async function decodeProgressToken(token: string) {
   return JSON.parse(progressString)
 }
 
-async function generateHash(data: string, secret: string) {
-  const msgBuffer = new TextEncoder().encode(data + secret)
+async function generateHash(data: string) {
+  const msgBuffer = new TextEncoder().encode(data + PROGRESS_TOKEN_SECRET)
   const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer)
   const hashArray = Array.from(new Uint8Array(hashBuffer))
   const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("")

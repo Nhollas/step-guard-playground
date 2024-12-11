@@ -25,6 +25,7 @@ export const BottomNavigation = ({
         type="button"
         disabled={!previousStepPathname}
         asChild={!!previousStepPathname}
+        className="disabled:pointer-events-none"
       >
         {previousStepPathname ? (
           <Link href={previousStepPathname}>Back</Link>
@@ -32,7 +33,11 @@ export const BottomNavigation = ({
           "Back"
         )}
       </Button>
-      <Button disabled={isSubmitting || !nextStepPathname} type="submit">
+      <Button
+        disabled={isSubmitting || !nextStepPathname}
+        type="submit"
+        className="disabled:pointer-events-none"
+      >
         {nextButtonText}
       </Button>
     </div>
