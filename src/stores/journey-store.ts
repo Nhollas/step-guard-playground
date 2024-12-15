@@ -1,3 +1,5 @@
+import { isLongString } from "@/lib/utils"
+import { isValid, parseISO } from "date-fns"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
@@ -13,7 +15,17 @@ export type JourneyActions = {
 
 export type JourneyStore = JourneyState & JourneyActions
 
-const storage = createJSONStorage(() => sessionStorage)
+const storage = createJSONStorage(() => sessionStorage, {
+  reviver: (_, value) => {
+    if (isLongString(value)) {
+      const parsed = parseISO(value)
+      if (isValid(parsed)) {
+        return parsed
+      }
+    }
+    return value
+  },
+})
 
 export const createJourneyStore = () =>
   create<JourneyStore>()(
