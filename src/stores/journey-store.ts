@@ -1,4 +1,4 @@
-import { isLongString } from "@/lib/utils"
+import { isStringISODateShaped } from "@/lib/utils"
 import { isValid, parseISO } from "date-fns"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
@@ -17,7 +17,12 @@ export type JourneyStore = JourneyState & JourneyActions
 
 const storage = createJSONStorage(() => sessionStorage, {
   reviver: (_, value) => {
-    if (isLongString(value)) {
+    /*
+      If the value is a ISO string, we need to parse it to a Date object.
+
+      We don't want to parse all strings to Date objects for performance reasons so we only check strings that are long enough to be a ISO string.
+    */
+    if (isStringISODateShaped(value)) {
       const parsed = parseISO(value)
       if (isValid(parsed)) {
         return parsed
