@@ -18,12 +18,12 @@ export function JourneyFormStep<T extends z.Schema>({
 }: JourneyFormStepProps<T>) {
   const { form, onSubmit } = useJourneyStep({ ...props })
   const {
-    formState: { isSubmitting: isFormSubmitting },
+    formState: { isSubmitSuccessful: isFormSubmitSuccessful },
   } = form
   const { nextStepPathname } = props
 
   const { isSubmitting, previousStepPathname } = useStepNavigation(
-    isFormSubmitting,
+    isFormSubmitSuccessful,
     nextStepPathname,
   )
 

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { ToastProvider } from "@/components/ui/toast"
 import { Suspense } from "react"
 import { StepGuardToast } from "@/components/step-guard-toast"
+import { JourneyStoreProvider } from "@/providers/journey-store-provider"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,17 +29,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ToastProvider>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <main>{children}</main>
-          <Toaster />
-          <Suspense>
-            <StepGuardToast />
-          </Suspense>
-        </body>
-      </ToastProvider>
+      <JourneyStoreProvider>
+        <ToastProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            <main>{children}</main>
+            <Toaster />
+            <Suspense>
+              <StepGuardToast />
+            </Suspense>
+          </body>
+        </ToastProvider>
+      </JourneyStoreProvider>
     </html>
   )
 }

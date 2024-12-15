@@ -13,7 +13,7 @@ import {
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
   const progressCookie = cookieStore.get(PROGRESS_COOKIE_NAME)
-  const stepPathname = request.nextUrl.pathname
+  const currentPathname = request.nextUrl.pathname
 
   try {
     if (!progressCookie) {
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
 
     const progress = await decodeProgressToken(progressCookie.value)
 
-    if (!progress.includes(stepPathname)) {
+    if (!progress.includes(currentPathname)) {
       return redirectToPreviousValidStep(progress, request.url)
     }
 
