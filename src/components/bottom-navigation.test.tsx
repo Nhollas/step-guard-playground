@@ -7,9 +7,8 @@ describe("BottomNavigation", () => {
     it("renders as a link when previousStepPathname is provided", () => {
       render(
         <BottomNavigation
-          isSubmitting={false}
+          isLoading={false}
           previousStepRoute="/previous-step"
-          hasNextStep
         />,
       )
 
@@ -20,7 +19,7 @@ describe("BottomNavigation", () => {
     })
 
     it("renders as disabled button when no previousStepPathname is provided", () => {
-      render(<BottomNavigation isSubmitting={false} hasNextStep />)
+      render(<BottomNavigation isLoading={false} />)
 
       const backButton = screen.getByRole("button", { name: /back/i })
 
@@ -30,8 +29,8 @@ describe("BottomNavigation", () => {
   })
 
   describe("Next button states", () => {
-    it('shows "Continue" when nextStepPathname is provided and not submitting', () => {
-      render(<BottomNavigation isSubmitting={false} hasNextStep />)
+    it('shows "Continue" when isLoading is false', () => {
+      render(<BottomNavigation isLoading={false} />)
 
       const continueButton = screen.getByRole("button", { name: /continue/i })
 
@@ -40,20 +39,12 @@ describe("BottomNavigation", () => {
     })
 
     it('shows "Loading..." when submitting', () => {
-      render(<BottomNavigation isSubmitting={true} hasNextStep />)
+      render(<BottomNavigation isLoading={true} />)
 
       const loadingButton = screen.getByRole("button", { name: /loading/i })
 
       expect(loadingButton).toBeInTheDocument()
       expect(loadingButton).toBeDisabled()
-    })
-
-    it('shows "Finished" when no nextStepPathname is provided', () => {
-      render(<BottomNavigation isSubmitting={false} />)
-
-      const finishedButton = screen.getByRole("button", { name: /finished/i })
-
-      expect(finishedButton).toBeInTheDocument()
     })
   })
 })
