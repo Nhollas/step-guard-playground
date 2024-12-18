@@ -4,23 +4,28 @@ import {
   encodeProgressToken,
 } from "@/lib/token-encode-decode"
 import { cookies } from "next/headers"
-import { PROGRESS_COOKIE_NAME } from "@/config/route-guards"
+import { Journey } from "@/types"
+import { getJourneyProgressCookieName } from "@/config/journey-steps"
 
-export const advanceJourneyStep = async (nextStep: string) => {
+export const advanceJourneyStep = async (
+  nextStepRoute: string,
+  journey: Journey,
+) => {
   const cookieStore = await cookies()
-  const currentProgress = cookieStore.get(PROGRESS_COOKIE_NAME)
+  const journeyProgressCookieName = getJourneyProgressCookieName(journey)
+  const currentProgress = cookieStore.get(journeyProgressCookieName)
 
   if (!currentProgress) {
-    throw new Error("Bad!")
+    throw new Error("No progress token found")
   }
 
   const progress = await decodeProgressToken(currentProgress.value)
   const updatedProgress = new Set<string>(progress)
-  updatedProgress.add(nextStep)
+  updatedProgress.add(nextStepRoute)
 
   const progressToken = await encodeProgressToken(Array.from(updatedProgress))
 
-  cookieStore.set(PROGRESS_COOKIE_NAME, progressToken, {
+  cookieStore.set(journeyProgressCookieName, progressToken, {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
   })

@@ -8,8 +8,8 @@ describe("BottomNavigation", () => {
       render(
         <BottomNavigation
           isSubmitting={false}
-          previousStepPathname="/previous-step"
-          nextStepPathname="/next-step"
+          previousStepRoute="/previous-step"
+          hasNextStep
         />,
       )
 
@@ -20,9 +20,7 @@ describe("BottomNavigation", () => {
     })
 
     it("renders as disabled button when no previousStepPathname is provided", () => {
-      render(
-        <BottomNavigation isSubmitting={false} nextStepPathname="/next-step" />,
-      )
+      render(<BottomNavigation isSubmitting={false} hasNextStep />)
 
       const backButton = screen.getByRole("button", { name: /back/i })
 
@@ -33,9 +31,7 @@ describe("BottomNavigation", () => {
 
   describe("Next button states", () => {
     it('shows "Continue" when nextStepPathname is provided and not submitting', () => {
-      render(
-        <BottomNavigation isSubmitting={false} nextStepPathname="/next-step" />,
-      )
+      render(<BottomNavigation isSubmitting={false} hasNextStep />)
 
       const continueButton = screen.getByRole("button", { name: /continue/i })
 
@@ -44,9 +40,7 @@ describe("BottomNavigation", () => {
     })
 
     it('shows "Loading..." when submitting', () => {
-      render(
-        <BottomNavigation isSubmitting={true} nextStepPathname="/next-step" />,
-      )
+      render(<BottomNavigation isSubmitting={true} hasNextStep />)
 
       const loadingButton = screen.getByRole("button", { name: /loading/i })
 

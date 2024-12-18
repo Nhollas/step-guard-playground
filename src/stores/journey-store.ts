@@ -1,5 +1,3 @@
-import { isStringISODateShaped } from "@/lib/utils"
-import { isValid, parseISO } from "date-fns"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
@@ -22,12 +20,12 @@ const storage = createJSONStorage(() => sessionStorage, {
 
       We don't want to parse all strings to Date objects for performance reasons so we only check strings that are long enough to be a ISO string.
     */
-    if (isStringISODateShaped(value)) {
-      const parsed = parseISO(value)
-      if (isValid(parsed)) {
-        return parsed
-      }
-    }
+    // if (isStringISODateShaped(value)) {
+    //   const parsed = parseISO(value)
+    //   if (isValid(parsed)) {
+    //     return parsed
+    //   }
+    // }
     return value
   },
 })

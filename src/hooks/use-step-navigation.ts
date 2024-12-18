@@ -1,34 +1,46 @@
-import { JOURNEY_STEPS_ORDERED } from "@/config/journey-steps"
+import { getOrderedJourneyStepRoutes } from "@/config/journey-steps"
+import { Journey } from "@/types"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
-export function useStepNavigation(
-  isFormSubmitting: boolean,
-  nextStepPathname?: string,
-) {
-  const pathname = usePathname()
-  const [isNavigating, setIsNavigating] = useState(false)
+type UseStepNavigationProps = {
+  journey: Journey
+  hasMadeSubmission: boolean
+  hasActionErrored?: boolean
+}
+
+export function useStepNavigation({
+  journey,
+  hasMadeSubmission,
+  hasActionErrored,
+}: UseStepNavigationProps) {
+  const urlPathname = usePathname()
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    if (isFormSubmitting && nextStepPathname) {
-      setIsNavigating(true)
+    if (hasMadeSubmission) {
+      setIsLoading(true)
     }
-  }, [isFormSubmitting, nextStepPathname])
+  }, [hasMadeSubmission])
 
   useEffect(() => {
-    if (isNavigating && pathname === nextStepPathname) {
-      setIsNavigating(false)
+    if (hasActionErrored) {
+      setIsLoading(false)
     }
-  }, [isNavigating, nextStepPathname, pathname])
+  }, [hasActionErrored])
 
-  const currentStepIndex = JOURNEY_STEPS_ORDERED.indexOf(pathname)
-  const previousStepPathname =
+  const orderedJourneyStepRoutes = getOrderedJourneyStepRoutes(journey)
+  const currentStepIndex = orderedJourneyStepRoutes.indexOf(urlPathname)
+  const previousStepRoute =
     currentStepIndex > 0
-      ? JOURNEY_STEPS_ORDERED[currentStepIndex - 1]
+      ? orderedJourneyStepRoutes[currentStepIndex - 1]
       : undefined
 
+  const hasNextStep = currentStepIndex < orderedJourneyStepRoutes.length - 1
+
   return {
-    isSubmitting: isFormSubmitting || isNavigating,
-    previousStepPathname,
+    isLoading,
+    previousStepRoute,
+    hasNextStep,
   }
 }

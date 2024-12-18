@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useToast } from "./use-toast"
 
 export function useRedirectAlert() {
-  const pathname = usePathname()
+  const urlPathname = usePathname()
   const params = useSearchParams()
   const redirectParam = params.get(GUARD_REDIRECT_REASON)
   const { toast } = useToast()
@@ -20,6 +20,6 @@ export function useRedirectAlert() {
       description: "Please finish this step's questions before continuing.",
     })
 
-    window.history.replaceState({}, "", pathname)
-  }, [pathname, redirectParam, toast])
+    window.history.replaceState({}, "", urlPathname)
+  }, [urlPathname, redirectParam, toast])
 }

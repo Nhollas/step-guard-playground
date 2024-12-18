@@ -2,37 +2,32 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 interface BottomNavigationProps {
-  isSubmitting: boolean
-  previousStepPathname?: string
-  nextStepPathname?: string
+  isLoading: boolean
+  previousStepRoute?: string
+  hasActionErrored?: boolean
 }
 
 export const BottomNavigation = ({
-  isSubmitting,
-  previousStepPathname,
-  nextStepPathname,
+  isLoading,
+  previousStepRoute,
 }: BottomNavigationProps) => {
-  const nextButtonText = nextStepPathname
-    ? isSubmitting
-      ? "Loading..."
-      : "Continue"
-    : "Finished"
+  const nextButtonText = isLoading ? "Loading..." : "Continue"
 
   return (
     <div className="grid w-full grid-cols-2 gap-x-8 p-4 rounded-md bg-blue-500">
       <Button
         variant="secondary"
         type="button"
-        disabled={!previousStepPathname}
-        asChild={!!previousStepPathname}
+        disabled={!previousStepRoute}
+        asChild={!!previousStepRoute}
       >
-        {previousStepPathname ? (
-          <Link href={previousStepPathname}>Back</Link>
+        {previousStepRoute ? (
+          <Link href={previousStepRoute}>Back</Link>
         ) : (
           "Back"
         )}
       </Button>
-      <Button disabled={isSubmitting || !nextStepPathname} type="submit">
+      <Button disabled={isLoading} type="submit">
         {nextButtonText}
       </Button>
     </div>

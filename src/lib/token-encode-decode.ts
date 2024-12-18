@@ -9,7 +9,7 @@ export async function encodeProgressToken(progress: string[]) {
   return `${encodedProgress}.${hash}`
 }
 
-export async function decodeProgressToken(token: string) {
+export async function decodeProgressToken(token: string): Promise<string[]> {
   const [encodedProgress, hash] = token.split(".")
   if (!encodedProgress || !hash) {
     throw new Error("Invalid token")

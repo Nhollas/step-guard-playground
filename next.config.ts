@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/",
-        destination: "/steps/one",
+        destination: "/journey/apple/assumptions",
         permanent: false,
       },
     ]
