@@ -1,12 +1,13 @@
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
-import { Toaster } from "@/components/ui/toaster"
-import { ToastProvider } from "@/components/ui/toast"
-import { Suspense } from "react"
+import { Header } from "@/components/header"
 import { StepGuardToast } from "@/components/step-guard-toast"
+import { ToastProvider } from "@/components/ui/toast"
+import { Toaster } from "@/components/ui/toaster"
 import { JourneyStoreProvider } from "@/providers/journey-store-provider"
 import QueryClientProvider from "@/providers/query-client-provider"
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import { Suspense } from "react"
+import "./globals.css"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +35,10 @@ export default function RootLayout({
         <QueryClientProvider>
           <ToastProvider>
             <body
-              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+              className={`${geistSans.variable} ${geistMono.variable} antialiased bg-red-500 min-h-screen`}
             >
-              <main>{children}</main>
+              <Header />
+              <main className="h-[calc(100vh-4rem)]">{children}</main>
               <Toaster />
               <Suspense>
                 <StepGuardToast />

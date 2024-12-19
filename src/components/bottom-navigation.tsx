@@ -24,7 +24,7 @@ export const BottomNavigation = ({
   const nextButtonText = isLoading ? "Loading..." : "Continue"
 
   return (
-    <div className="grid w-full grid-cols-2 gap-x-8 p-4 rounded-md bg-blue-500">
+    <div className="grid w-full grid-cols-2 gap-x-4 p-4 md:p-8 md:gap-x-8 bg-blue-500">
       <Button
         variant="secondary"
         type="button"
