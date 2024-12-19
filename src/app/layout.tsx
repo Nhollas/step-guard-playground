@@ -35,10 +35,10 @@ export default function RootLayout({
         <QueryClientProvider>
           <ToastProvider>
             <body
-              className={`${geistSans.variable} ${geistMono.variable} antialiased bg-red-500 min-h-screen`}
+              className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
             >
               <Header />
-              <main className="h-[calc(100vh-4rem)]">{children}</main>
+              <main className="h-[calc(100vh-4rem)] md:p-8">{children}</main>
               <Toaster />
               <Suspense>
                 <StepGuardToast />
