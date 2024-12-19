@@ -9,6 +9,17 @@ type UseStepNavigationProps = {
   hasActionErrored?: boolean
 }
 
+/**
+ * Custom hook to manage step navigation state within a journey
+ * @param journey - The journey the customer is on
+ * @param hasMadeSubmission - Whether the customer has made a submission by submitting the step they are on
+ * @param hasActionErrored - Whether the action has errored (optional)
+ *
+ * @returns An object containing:
+ * - isLoading: A boolean indicating if a transition between steps is happening.
+ * - previousStepRoute: The route of the previous step, or undefined if on the first step.
+ * - hasNextStep: A boolean indicating if there is a next step available in the journey.
+ */
 export function useStepNavigation({
   journey,
   hasMadeSubmission,

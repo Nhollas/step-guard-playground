@@ -1,6 +1,10 @@
 "use client"
 import { advanceJourneyStep } from "@/actions/advanceJourneyStep"
-import { createJourneyRoute, SUCCESS_STEP } from "@/config/journey-steps"
+import {
+  createJourneyRoute,
+  JourneyStep,
+  SUCCESS_STEP,
+} from "@/config/journey-steps"
 import { useJourneyStore } from "@/providers/journey-store-provider"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
@@ -12,9 +16,22 @@ import { useSyncFormWithStore } from "./use-sync-form-with-store"
 
 export interface UseJourneyStepProps<T extends z.Schema> {
   schema: T
-  nextStepRouteSegment?: string
+  nextStepRouteSegment?: JourneyStep
   handlePurchaseProducts?: (values: Record<string, unknown>) => Promise<unknown>
 }
+
+/**
+ * Custom hook to manage journey steps
+ * @template T - The Zod schema type
+ * @param props.schema - The Zod schema for this forms validation
+ * @param props.nextStepRouteSegment - The next step route segment, e.g. `user-details` or `cover-details` (optional)
+ * @param props.handlePurchaseProducts - Function to handle purchase products, pass this when the form is the last step (optional)
+ *
+ * @returns An object containing:
+ * - form: The form object back from [useForm](https://www.react-hook-form.com/api/useform).
+ * - onSubmit: The submit handler for the form.
+ * - journey: The journey the customer is on.
+ */
 
 export function useJourneyStep<T extends z.Schema>({
   schema,
@@ -24,6 +41,7 @@ export function useJourneyStep<T extends z.Schema>({
   const router = useRouter()
   const { storeData, data } = useJourneyStore((state) => state)
   const journey = useJourneyPath()
+
   const nextStepRoute = nextStepRouteSegment
     ? createJourneyRoute(journey, nextStepRouteSegment)
     : undefined
@@ -45,9 +63,6 @@ export function useJourneyStep<T extends z.Schema>({
   useSyncFormWithStore(form, storeData, data)
 
   const onSubmit = async () => {
-    // Simulate a delay for the user to see the loading state
-    await new Promise((resolve) => setTimeout(resolve, 750))
-
     if (nextStepRoute) {
       await advanceJourneyStep(nextStepRoute, journey)
 

@@ -9,10 +9,19 @@ export const QUOTE_STEP = "quote"
 export const PAYMENT_STEP = "payment"
 export const SUCCESS_STEP = "success"
 
-export const createJourneyRoute = (journey: Journey, step: string) =>
+export type JourneyStep =
+  | typeof ASSUMPTIONS_STEP
+  | typeof USER_DETAILS_STEP
+  | typeof HOME_DETAILS_STEP
+  | typeof CAR_DETAILS_STEP
+  | typeof QUOTE_STEP
+  | typeof PAYMENT_STEP
+  | typeof SUCCESS_STEP
+
+export const createJourneyRoute = (journey: Journey, step: JourneyStep) =>
   `/journey/${journey}/${step}`
 
-export const journeys: Record<Journey, string[]> = {
+const journeySteps: Record<Journey, JourneyStep[]> = {
   apple: [
     ASSUMPTIONS_STEP,
     USER_DETAILS_STEP,
@@ -32,11 +41,11 @@ export const journeys: Record<Journey, string[]> = {
 }
 
 export const getOrderedJourneyStepRoutes = (journey: Journey): string[] => {
-  return journeys[journey].map((step) => createJourneyRoute(journey, step))
+  return journeySteps[journey].map((step) => createJourneyRoute(journey, step))
 }
 
 export const getFirstJourneyRoute = (journey: Journey) =>
-  createJourneyRoute(journey, journeys[journey][0])
+  createJourneyRoute(journey, journeySteps[journey][0])
 
 export const getJourneyProgressCookieName = (journey: Journey) =>
   `${journey}-${PROGRESS_COOKIE_NAME}`

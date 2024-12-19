@@ -1,3 +1,4 @@
+import { Journey } from "@/types"
 import { cookies } from "next/headers"
 import { NextResponse, type NextRequest } from "next/server"
 import {
@@ -5,13 +6,17 @@ import {
   getJourneyProgressCookieName,
 } from "./config/journey-steps"
 import { GUARD_REDIRECT_REASON } from "./config/route-guards"
+import { extractJourneyFromPathname } from "./lib/extract-journey-from-pathname"
 import {
   decodeProgressToken,
   encodeProgressToken,
 } from "./lib/token-encode-decode"
-import { extractJourneyFromPathname } from "./lib/extract-journey-from-pathname"
-import { Journey } from "@/types"
 
+/**
+ * Middleware to manage journey progress and ensure users follow the correct steps
+ * @param request - The incoming Next.js request object
+ * @returns A NextResponse object to either continue the request or redirect the user
+ */
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
   const currentPathname = request.nextUrl.pathname

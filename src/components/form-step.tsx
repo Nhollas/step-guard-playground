@@ -7,12 +7,25 @@ import { UseFormReturn } from "react-hook-form"
 import { Schema, z } from "zod"
 import { BottomNavigation } from "./bottom-navigation"
 
-export interface JourneyFormStepProps<T extends Schema>
+interface JourneyFormStepProps<T extends Schema>
   extends UseJourneyStepProps<T> {
   render: (form: UseFormReturn<z.infer<T>>) => ReactNode
   hasActionErrored?: boolean
 }
 
+/**
+ * JourneyFormStep component to render a form step within a journey
+ * @template T - The Zod schema type
+ * @param props.render - Function to render the form fields
+ * @param props.hasActionErrored - Indicates if an action has errored (optional)
+ * @param props.schema - The Zod schema for form validation
+ * @param props.nextStepRouteSegment - The next step route segment, e.g. `user-details` or `cover-details` (optional)
+ * @param props.handlePurchaseProducts - Function to handle purchase products, pass this when the form is the last step (optional)
+ *
+ * @returns A JSX element containing:
+ * - The form fields rendered by the `render` function
+ * - The bottom navigation buttons
+ */
 export function JourneyFormStep<T extends z.Schema>({
   render,
   hasActionErrored,
