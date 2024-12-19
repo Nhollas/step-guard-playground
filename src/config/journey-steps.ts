@@ -40,6 +40,24 @@ const journeySteps: Record<Journey, JourneyStep[]> = {
   ],
 }
 
+/**
+ * Returns an ordered array of journey step routes for a given journey
+ *
+ * @param journey - The journey for which to get the ordered step routes
+ * @returns An array of strings representing the ordered journey step routes
+ *
+ * @example
+ * getOrderedJourneyStepRoutes("apple")
+ * → [
+ *     "/journey/apple/assumptions",
+ *     "/journey/apple/user-details",
+ *     "/journey/apple/home-details",
+ *     "/journey/apple/car-details",
+ *     "/journey/apple/quote",
+ *     "/journey/apple/payment",
+ *     "/journey/apple/success"
+ *   ]
+ */
 export const getOrderedJourneyStepRoutes = (journey: Journey): string[] => {
   return journeySteps[journey].map((step) => createJourneyRoute(journey, step))
 }

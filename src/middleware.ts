@@ -14,6 +14,7 @@ import {
 
 /**
  * Middleware to manage journey progress and ensure users follow the correct steps
+ *
  * @param request - The incoming Next.js request object
  * @returns A NextResponse object to either continue the request or redirect the user
  */
@@ -21,6 +22,11 @@ export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
   const currentPathname = request.nextUrl.pathname
   const journey = extractJourneyFromPathname(currentPathname)
+
+  if (!journey) {
+    return NextResponse.next()
+  }
+
   const journeyProgressCookieName = getJourneyProgressCookieName(journey)
   const progressCookie = cookieStore.get(journeyProgressCookieName)
 

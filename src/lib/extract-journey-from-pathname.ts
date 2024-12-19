@@ -1,10 +1,17 @@
 import { Journey } from "@/types"
 
-export const extractJourneyFromPathname = (pathname: string): Journey => {
+/**
+ * Extracts the journey segment from the given pathname
+ * @param pathname - The URL pathname to extract the journey from
+ * @returns The journey segment or undefined if the format is invalid
+ */
+export const extractJourneyFromPathname = (
+  pathname: string,
+): Journey | undefined => {
   const journeyPathnameRegex = /^\/journey\/([^\/]+)\/[^\/]+$/
   const match = pathname.match(journeyPathnameRegex)
   if (!match) {
-    throw new Error("Invalid pathname format")
+    return undefined
   }
   return match[1] as Journey
 }
