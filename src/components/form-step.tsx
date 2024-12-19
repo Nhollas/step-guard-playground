@@ -45,13 +45,13 @@ export function JourneyFormStep<T extends z.Schema>({
   return (
     <Form {...form}>
       <form
-        className={cn("flex flex-col w-full mx-auto h-full")}
+        className={cn("flex flex-col w-full h-full relative")}
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex-grow overflow-y-auto p-4 md:p-8">
+        <div className="flex-grow overflow-y-auto p-4 md:p-8 mb-[68px]">
           {render(form)}
         </div>
-        <div className="bottom-0">
+        <div className="fixed inset-x-0 bottom-0">
           <BottomNavigation
             isLoading={isLoading}
             previousStepRoute={previousStepRoute}
