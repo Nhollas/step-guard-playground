@@ -12,12 +12,14 @@ type UseStepNavigationProps = {
  *
  * @returns An object containing:
  * - isLoading: A boolean indicating if a transition between steps is happening.
+ * - isError: A boolean indicating if an error has occurred during the transition.
  */
 export function useStepNavigation({
   hasMadeSubmission,
   hasActionErrored,
 }: UseStepNavigationProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     if (hasMadeSubmission) {
@@ -28,10 +30,16 @@ export function useStepNavigation({
   useEffect(() => {
     if (hasActionErrored) {
       setIsLoading(false)
+      setIsError(true)
+      const timeout = setTimeout(() => {
+        setIsError(false)
+      }, 2000)
+      return () => clearTimeout(timeout)
     }
   }, [hasActionErrored])
 
   return {
     isLoading,
+    isError,
   }
 }

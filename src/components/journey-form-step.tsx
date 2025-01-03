@@ -46,7 +46,7 @@ export function JourneyFormStep<T extends z.Schema>({
     formState: { isSubmitting: isFormSubmitting, isValid: isFormValid },
   } = form
 
-  const { isLoading } = useStepNavigation({
+  const { isLoading, isError } = useStepNavigation({
     hasMadeSubmission: isFormSubmitting && isFormValid,
     hasActionErrored,
   })
@@ -63,6 +63,7 @@ export function JourneyFormStep<T extends z.Schema>({
         <BottomNavigation
           isLoading={isLoading}
           previousStepRoute={previousStepRoute}
+          isError={isError}
         />
       </form>
     </Form>

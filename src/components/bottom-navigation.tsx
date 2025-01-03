@@ -4,14 +4,14 @@ import Link from "next/link"
 interface BottomNavigationProps {
   isLoading: boolean
   previousStepRoute?: string
-  hasActionErrored?: boolean
+  isError?: boolean
 }
 
 /**
  * BottomNavigation component to render navigation buttons
  * @param props.isLoading - Indicates if the next button should show a loading state
  * @param props.previousStepRoute - The route of the previous step, if any (optional)
- * @param props.hasActionErrored - Indicates if an action has errored (optional)
+ * @param props.isError - Indicates if an action has errored (optional)
  *
  * @returns A JSX element containing:
  * - A "Back" button that navigates to the previous step if available
@@ -20,8 +20,13 @@ interface BottomNavigationProps {
 export const BottomNavigation = ({
   isLoading,
   previousStepRoute,
+  isError,
 }: BottomNavigationProps) => {
-  const nextButtonText = isLoading ? "Loading..." : "Continue"
+  const nextButtonText = isError
+    ? "Action Errored"
+    : isLoading
+    ? "Loading..."
+    : "Continue"
 
   return (
     <div className="grid w-full grid-cols-2 gap-x-4 bg-blue-500 py-4 sticky bottom-0">
