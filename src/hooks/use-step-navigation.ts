@@ -31,6 +31,7 @@ export function useStepNavigation({
     if (hasActionErrored) {
       setIsLoading(false)
       setIsError(true)
+
       const timeout = setTimeout(() => {
         setIsError(false)
       }, 2000)

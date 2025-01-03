@@ -10,7 +10,7 @@ export async function purchaseProductsAction(
 ): Promise<PurchaseProductsResponse> {
   console.log("purchaseProducts request:", request)
 
-  if (Math.random() < 1) {
+  if (Math.random() < 0.5) {
     throw new Error("A purchase error occurred")
   }
 
