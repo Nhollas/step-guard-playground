@@ -3,14 +3,12 @@ import { cookies } from "next/headers"
 import { NextResponse, type NextRequest } from "next/server"
 import {
   getFirstJourneyRoute,
+  getIntroductionRoute,
   getJourneyProgressCookieName,
 } from "./config/journey-steps"
 import { GUARD_REDIRECT_REASON } from "./config/route-guards"
 import { extractJourneyFromPathname } from "./lib/extract-journey-from-pathname"
-import {
-  decodeProgressToken,
-  encodeProgressToken,
-} from "./lib/token-encode-decode"
+import { decodeProgressToken } from "./lib/token-encode-decode"
 
 /**
  * Middleware to manage journey progress and ensure users follow the correct steps
@@ -22,21 +20,19 @@ export async function middleware(request: NextRequest) {
   const cookieStore = await cookies()
   const currentPathname = request.nextUrl.pathname
   const journey = extractJourneyFromPathname(currentPathname)
-
-  if (!journey) {
-    return NextResponse.next()
-  }
-
   const journeyProgressCookieName = getJourneyProgressCookieName(journey)
-  const progressCookie = cookieStore.get(journeyProgressCookieName)
+  const introductionRoute = getIntroductionRoute(journey)
 
   try {
+    if (currentPathname === introductionRoute) {
+      return NextResponse.next()
+    }
+
+    const progressCookie = cookieStore.get(journeyProgressCookieName)
+
     if (!progressCookie) {
-      return await redirectToStartWithFreshProgress(
-        cookieStore,
-        request.url,
-        journeyProgressCookieName,
-        journey,
+      return NextResponse.redirect(
+        new URL(introductionRoute, request.url).toString(),
       )
     }
 
@@ -48,30 +44,12 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.next()
   } catch (e) {
-    console.error("Error occurred in Middleware:", e)
-
     // Something went wrong, restart the users progress.
-    return await redirectToStartWithFreshProgress(
-      cookieStore,
-      request.url,
-      journeyProgressCookieName,
-      journey,
-    )
+    console.error("Error occurred in Middleware:", e)
+    cookieStore.delete(journeyProgressCookieName)
+
+    return NextResponse.error()
   }
-}
-
-async function redirectToStartWithFreshProgress(
-  cookieStore: Awaited<ReturnType<typeof cookies>>,
-  baseUrl: string,
-  progressCookieName: string,
-  journey: Journey,
-) {
-  const startingRoute = getFirstJourneyRoute(journey)
-
-  const progressToken = await encodeProgressToken([startingRoute])
-  cookieStore.set(progressCookieName, progressToken)
-
-  return NextResponse.redirect(new URL(startingRoute, baseUrl))
 }
 
 function redirectToPreviousValidStep(

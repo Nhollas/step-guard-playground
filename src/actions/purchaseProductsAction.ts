@@ -3,9 +3,9 @@
 import {
   PurchaseProductsRequest,
   PurchaseProductsResponse,
-} from "./purchaseProducts.types"
+} from "./purchaseProductsAction.types"
 
-export async function purchaseProducts(
+export async function purchaseProductsAction(
   request: PurchaseProductsRequest,
 ): Promise<PurchaseProductsResponse> {
   console.log("purchaseProducts request:", request)

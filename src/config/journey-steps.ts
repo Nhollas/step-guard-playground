@@ -8,6 +8,7 @@ export const CAR_DETAILS_STEP = "car-details"
 export const QUOTE_STEP = "quote"
 export const PAYMENT_STEP = "payment"
 export const SUCCESS_STEP = "success"
+export const INTRODUCTION_STEP = "introduction"
 
 export type JourneyStep =
   | typeof ASSUMPTIONS_STEP
@@ -17,12 +18,11 @@ export type JourneyStep =
   | typeof QUOTE_STEP
   | typeof PAYMENT_STEP
   | typeof SUCCESS_STEP
-
-export const createJourneyRoute = (journey: Journey, step: JourneyStep) =>
-  `/journey/${journey}/${step}`
+  | typeof INTRODUCTION_STEP
 
 const journeySteps: Record<Journey, JourneyStep[]> = {
   apple: [
+    INTRODUCTION_STEP,
     ASSUMPTIONS_STEP,
     USER_DETAILS_STEP,
     HOME_DETAILS_STEP,
@@ -32,6 +32,7 @@ const journeySteps: Record<Journey, JourneyStep[]> = {
     SUCCESS_STEP,
   ],
   orange: [
+    INTRODUCTION_STEP,
     ASSUMPTIONS_STEP,
     CAR_DETAILS_STEP,
     QUOTE_STEP,
@@ -40,27 +41,41 @@ const journeySteps: Record<Journey, JourneyStep[]> = {
   ],
 }
 
-/**
- * Returns an ordered array of journey step routes for a given journey
- *
- * @param journey - The journey for which to get the ordered step routes
- * @returns An array of strings representing the ordered journey step routes
- *
- * @example
- * getOrderedJourneyStepRoutes("apple")
- * → [
- *     "/journey/apple/assumptions",
- *     "/journey/apple/user-details",
- *     "/journey/apple/home-details",
- *     "/journey/apple/car-details",
- *     "/journey/apple/quote",
- *     "/journey/apple/payment",
- *     "/journey/apple/success"
- *   ]
- */
-export const getOrderedJourneyStepRoutes = (journey: Journey): string[] => {
-  return journeySteps[journey].map((step) => createJourneyRoute(journey, step))
+const findRouteIndex = (routes: string[], currentPathname: string): number =>
+  routes.findIndex((route) => route === currentPathname)
+
+const createJourneyRoute = (journey: Journey, step: JourneyStep) =>
+  `/journey/${journey}/${step}`
+
+const getRelativeJourneyRoute = (
+  currentPathname: string,
+  journey: Journey,
+  offset: number,
+): string | undefined => {
+  const orderedRoutes = getOrderedJourneyStepRoutes(journey)
+  const currentIndex = findRouteIndex(orderedRoutes, currentPathname)
+
+  const targetIndex = currentIndex + offset
+  const isValidIndex = targetIndex >= 0 && targetIndex < orderedRoutes.length
+
+  return isValidIndex ? orderedRoutes[targetIndex] : undefined
 }
+
+export const getNextJourneyRoute = (
+  currentPathname: string,
+  journey: Journey,
+) => getRelativeJourneyRoute(currentPathname, journey, 1)
+
+export const getPreviousJourneyRoute = (
+  currentPathname: string,
+  journey: Journey,
+) => getRelativeJourneyRoute(currentPathname, journey, -1)
+
+export const getOrderedJourneyStepRoutes = (journey: Journey): string[] =>
+  journeySteps[journey].map((step) => createJourneyRoute(journey, step))
+
+export const getIntroductionRoute = (journey: Journey) =>
+  createJourneyRoute(journey, INTRODUCTION_STEP)
 
 export const getFirstJourneyRoute = (journey: Journey) =>
   createJourneyRoute(journey, journeySteps[journey][0])

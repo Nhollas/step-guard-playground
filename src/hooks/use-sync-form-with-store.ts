@@ -1,20 +1,15 @@
 import { useEffect } from "react"
 import { UseFormReturn } from "react-hook-form"
 
-export function useSyncFormWithStore<
-  TStoreData extends Record<string, unknown>,
->(
+export function useSyncFormWithStore(
   form: UseFormReturn,
-  storeData: (data: Partial<TStoreData>) => void,
-  currentData: TStoreData,
+  storeData: (data: Record<string, unknown>) => void,
 ) {
   const { watch } = form
 
   useEffect(() => {
-    const { unsubscribe } = watch((formValues) =>
-      storeData({ ...currentData, ...formValues }),
-    )
+    const { unsubscribe } = watch((formValues) => storeData(formValues))
 
     return () => unsubscribe()
-  }, [storeData, currentData, watch])
+  }, [storeData, watch])
 }

@@ -1,27 +1,22 @@
 "use client"
 
-import { advanceJourneyStepAction } from "@/actions/advanceJourneyStepAction"
+import { startJourneyAction } from "@/actions/startJourneyAction"
 import { BottomNavigation } from "@/components/bottom-navigation"
 import { Form } from "@/components/ui/form"
 import { useJourneyForm } from "@/hooks/use-journey-form"
 import { useJourneyNavigation } from "@/hooks/use-journey-navigation"
-import { usePurchaseProductsMutation } from "@/hooks/use-purchase-products-mutation"
 import { useStepNavigation } from "@/hooks/use-step-navigation"
 import { cn } from "@/lib/utils"
 import { z } from "zod"
 
-const paymentStepSchema = z.object({})
-type PaymentStepSchema = z.infer<typeof paymentStepSchema>
+const introductionStepSchema = z.object({})
 
-export default function PaymentPage() {
-  const { mutateAsync: purchaseProductsAsync, isError } =
-    usePurchaseProductsMutation()
-
+export default function IntroductionPage() {
   const { journey, previousStepRoute, nextStepRoute, currentStepRoute } =
     useJourneyNavigation()
   const { form } = useJourneyForm({
     journey,
-    schema: paymentStepSchema,
+    schema: introductionStepSchema,
     nextStepRoute,
     currentStepRoute,
   })
@@ -31,12 +26,10 @@ export default function PaymentPage() {
 
   const { isLoading } = useStepNavigation({
     hasMadeSubmission: isFormSubmitting && isFormValid,
-    hasActionErrored: isError,
   })
 
-  const onSubmit = async (values: PaymentStepSchema) => {
-    await purchaseProductsAsync(values)
-    await advanceJourneyStepAction(journey, currentStepRoute)
+  const onSubmit = async () => {
+    await startJourneyAction(journey)
   }
 
   return (
@@ -48,10 +41,7 @@ export default function PaymentPage() {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="flex-grow py-10 md:py-20">
-          <h1>Payment Page (50%) error chance</h1>
-          {isError && (
-            <p className="text-red-500">An error occurred, please try again</p>
-          )}
+          <h1>Introduction Page</h1>
         </div>
         <BottomNavigation
           isLoading={isLoading}

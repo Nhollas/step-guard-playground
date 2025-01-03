@@ -6,7 +6,17 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/",
-        destination: "/journey/apple/assumptions",
+        destination: "/journey/apple/introduction",
+        permanent: false,
+      },
+      {
+        source: "/journey/apple",
+        destination: "/journey/apple/introduction",
+        permanent: false,
+      },
+      {
+        source: "/journey/orange",
+        destination: "/journey/orange/introduction",
         permanent: false,
       },
     ]

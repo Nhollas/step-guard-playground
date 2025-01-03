@@ -1,5 +1,6 @@
 import { Form } from "@/components/ui/form"
-import { useJourneyStep, UseJourneyStepProps } from "@/hooks/use-journey-step"
+import { useJourneyForm, UseJourneyFormProps } from "@/hooks/use-journey-form"
+import { useJourneyNavigation } from "@/hooks/use-journey-navigation"
 import { useStepNavigation } from "@/hooks/use-step-navigation"
 import { cn } from "@/lib/utils"
 import { ReactNode } from "react"
@@ -8,9 +9,8 @@ import { Schema, z } from "zod"
 import { BottomNavigation } from "./bottom-navigation"
 
 interface JourneyFormStepProps<T extends Schema>
-  extends UseJourneyStepProps<T> {
+  extends Pick<UseJourneyFormProps<T>, "schema"> {
   render: (form: UseFormReturn<z.infer<T>>) => ReactNode
-  hasActionErrored?: boolean
 }
 
 /**
@@ -28,31 +28,33 @@ interface JourneyFormStepProps<T extends Schema>
  */
 export function JourneyFormStep<T extends z.Schema>({
   render,
-  hasActionErrored,
-  ...props
+  schema,
 }: JourneyFormStepProps<T>) {
-  const { form, onSubmit, journey } = useJourneyStep({ ...props })
+  const { previousStepRoute, nextStepRoute, journey, currentStepRoute } =
+    useJourneyNavigation()
+  const { form, onSubmit } = useJourneyForm({
+    journey,
+    schema,
+    nextStepRoute,
+    currentStepRoute,
+  })
   const {
     formState: { isSubmitting: isFormSubmitting, isValid: isFormValid },
   } = form
 
-  const { isLoading, previousStepRoute } = useStepNavigation({
-    journey,
+  const { isLoading } = useStepNavigation({
     hasMadeSubmission: isFormSubmitting && isFormValid,
-    hasActionErrored,
   })
 
   return (
     <Form {...form}>
       <form
         className={cn(
-          "flex flex-col w-full min-h-full *:px-4 md:*:px-8 max-w-screen-sm ring-2 ring-black/25 mx-auto sm:rounded-t-xl",
+          "flex flex-col w-full min-h-full *:px-10 md:*:px-20 max-w-screen-sm bg-gray-100 mx-auto",
         )}
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex-grow pb-12 md:pb-20 pt-8 md:pt-16">
-          {render(form)}
-        </div>
+        <div className="flex-grow py-10 md:py-20">{render(form)}</div>
         <BottomNavigation
           isLoading={isLoading}
           previousStepRoute={previousStepRoute}
