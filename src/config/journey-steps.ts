@@ -1,14 +1,14 @@
 import { Journey } from "@/types"
 import { PROGRESS_COOKIE_NAME } from "./route-guards"
 
-export const ASSUMPTIONS_STEP = "assumptions"
-export const USER_DETAILS_STEP = "user-details"
-export const HOME_DETAILS_STEP = "home-details"
-export const CAR_DETAILS_STEP = "car-details"
-export const QUOTE_STEP = "quote"
-export const PAYMENT_STEP = "payment"
-export const SUCCESS_STEP = "success"
-export const INTRODUCTION_STEP = "introduction"
+const ASSUMPTIONS_STEP = "assumptions"
+const USER_DETAILS_STEP = "user-details"
+const HOME_DETAILS_STEP = "home-details"
+const CAR_DETAILS_STEP = "car-details"
+const QUOTE_STEP = "quote"
+const PAYMENT_STEP = "payment"
+const SUCCESS_STEP = "success"
+const INTRODUCTION_STEP = "introduction"
 
 export type JourneyStep =
   | typeof ASSUMPTIONS_STEP
