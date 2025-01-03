@@ -74,9 +74,6 @@ export const getPreviousJourneyRoute = (
 export const getOrderedJourneyStepRoutes = (journey: Journey): string[] =>
   journeySteps[journey].map((step) => createJourneyRoute(journey, step))
 
-export const getIntroductionRoute = (journey: Journey) =>
-  createJourneyRoute(journey, INTRODUCTION_STEP)
-
 export const getFirstJourneyRoute = (journey: Journey) =>
   createJourneyRoute(journey, journeySteps[journey][0])
 

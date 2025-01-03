@@ -1,6 +1,6 @@
 "use server"
 import {
-  getIntroductionRoute,
+  getFirstJourneyRoute,
   getJourneyProgressCookieName,
   getNextJourneyRoute,
 } from "@/config/journey-steps"
@@ -11,11 +11,11 @@ import { redirect } from "next/navigation"
 
 export const startJourneyAction = async (journey: Journey) => {
   const cookieStore = await cookies()
-  const introductionRoute = getIntroductionRoute(journey)
-  const nextStepRoute = getNextJourneyRoute(introductionRoute, journey)!
+  const startingJourneyRoute = getFirstJourneyRoute(journey)
+  const nextStepRoute = getNextJourneyRoute(startingJourneyRoute, journey)!
 
   const progressToken = await encodeProgressToken([
-    introductionRoute,
+    startingJourneyRoute,
     nextStepRoute,
   ])
   const journeyProgressCookieName = getJourneyProgressCookieName(journey)

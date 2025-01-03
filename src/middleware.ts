@@ -3,7 +3,6 @@ import { cookies } from "next/headers"
 import { NextResponse, type NextRequest } from "next/server"
 import {
   getFirstJourneyRoute,
-  getIntroductionRoute,
   getJourneyProgressCookieName,
 } from "./config/journey-steps"
 import { GUARD_REDIRECT_REASON } from "./config/route-guards"
@@ -21,10 +20,10 @@ export async function middleware(request: NextRequest) {
   const currentPathname = request.nextUrl.pathname
   const journey = extractJourneyFromPathname(currentPathname)
   const journeyProgressCookieName = getJourneyProgressCookieName(journey)
-  const introductionRoute = getIntroductionRoute(journey)
+  const firstJourneyRoute = getFirstJourneyRoute(journey)
 
   try {
-    if (currentPathname === introductionRoute) {
+    if (currentPathname === firstJourneyRoute) {
       return NextResponse.next()
     }
 
@@ -32,7 +31,7 @@ export async function middleware(request: NextRequest) {
 
     if (!progressCookie) {
       return NextResponse.redirect(
-        new URL(introductionRoute, request.url).toString(),
+        new URL(firstJourneyRoute, request.url).toString(),
       )
     }
 
