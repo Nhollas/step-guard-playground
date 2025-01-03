@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useSyncFormWithStore } from "./use-sync-form-with-store"
 
 export interface UseJourneyFormProps<T extends z.Schema> {
   schema: T
@@ -51,10 +50,8 @@ export function useJourneyForm<T extends z.Schema>({
     },
   })
 
-  useSyncFormWithStore(form, storeData)
-
   const onSubmit = async (values: z.infer<T>) => {
-    console.log("values:", values)
+    storeData(values)
     await advanceJourneyStepAction(journey, currentStepRoute)
   }
 

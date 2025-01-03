@@ -11,6 +11,8 @@ import { BottomNavigation } from "./bottom-navigation"
 interface JourneyFormStepProps<T extends Schema>
   extends Pick<UseJourneyFormProps<T>, "schema"> {
   render: (form: UseFormReturn<z.infer<T>>) => ReactNode
+  onSubmitOverride?: (values: z.infer<T>) => void
+  hasActionErrored?: boolean
 }
 
 /**
@@ -29,10 +31,12 @@ interface JourneyFormStepProps<T extends Schema>
 export function JourneyFormStep<T extends z.Schema>({
   render,
   schema,
+  onSubmitOverride,
+  hasActionErrored,
 }: JourneyFormStepProps<T>) {
   const { previousStepRoute, nextStepRoute, journey, currentStepRoute } =
     useJourneyNavigation()
-  const { form, onSubmit } = useJourneyForm({
+  const { form, onSubmit: defaultOnSubmit } = useJourneyForm({
     journey,
     schema,
     nextStepRoute,
@@ -44,6 +48,7 @@ export function JourneyFormStep<T extends z.Schema>({
 
   const { isLoading } = useStepNavigation({
     hasMadeSubmission: isFormSubmitting && isFormValid,
+    hasActionErrored,
   })
 
   return (
@@ -52,7 +57,7 @@ export function JourneyFormStep<T extends z.Schema>({
         className={cn(
           "flex flex-col w-full min-h-full *:px-10 md:*:px-20 max-w-screen-sm bg-gray-100 mx-auto",
         )}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmitOverride ?? defaultOnSubmit)}
       >
         <div className="flex-grow py-10 md:py-20">{render(form)}</div>
         <BottomNavigation

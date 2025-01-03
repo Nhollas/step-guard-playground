@@ -8,7 +8,10 @@ export function useSyncFormWithStore(
   const { watch } = form
 
   useEffect(() => {
-    const { unsubscribe } = watch((formValues) => storeData(formValues))
+    const { unsubscribe } = watch((formValues) => {
+      console.log("formValues:", formValues)
+      storeData(formValues)
+    })
 
     return () => unsubscribe()
   }, [storeData, watch])
