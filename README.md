@@ -26,7 +26,6 @@ These instructions will guide you on setting up this repo on your local machine.
 
 - Node.js
 - npm
-- Docker (if you want to run the OpenTelemetry Collector)
 
 ## Setting Up The Project
 
