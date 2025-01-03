@@ -25,6 +25,7 @@ interface JourneyNavigation {
  * - journey: The current journey type extracted from the URL
  * - nextStepRoute: The route to the next step in the journey
  * - previousStepRoute: The route to the previous step in the journey, if any
+ * - currentStepRoute: The current URL pathname
  */
 export function useJourneyNavigation(): JourneyNavigation {
   const urlPathname = usePathname()
