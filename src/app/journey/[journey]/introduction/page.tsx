@@ -1,7 +1,7 @@
 "use client"
 
 import { startJourneyAction } from "@/actions/startJourneyAction"
-import { JourneyFormStep } from "@/components/journey-form-step"
+import { JourneyStepForm } from "@/components/journey-step-form"
 import { useJourneyNavigation } from "@/hooks/use-journey-navigation"
 import { useJourneyStore } from "@/providers/journey-store-provider"
 import { z } from "zod"
@@ -26,7 +26,7 @@ export default function IntroductionPage() {
   }
 
   return (
-    <JourneyFormStep
+    <JourneyStepForm
       schema={introductionStepSchema}
       onSubmitOverride={onSubmit}
       render={() => <h1>Introduction Page</h1>}

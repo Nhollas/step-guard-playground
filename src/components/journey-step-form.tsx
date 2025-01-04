@@ -8,7 +8,7 @@ import { UseFormReturn } from "react-hook-form"
 import { Schema, z } from "zod"
 import { BottomNavigation } from "./bottom-navigation"
 
-interface JourneyFormStepProps<T extends Schema>
+interface JourneyStepFormProps<T extends Schema>
   extends Pick<UseJourneyFormProps<T>, "schema"> {
   render: (form: UseFormReturn<z.infer<T>>) => ReactNode
   onSubmitOverride?: (values: z.infer<T>) => void
@@ -16,7 +16,7 @@ interface JourneyFormStepProps<T extends Schema>
 }
 
 /**
- * JourneyFormStep component to render a form step within a journey
+ * JourneyStepForm component to render a form step within a journey
  * @template T - The Zod schema type
  * @param props.render - Function to render the form fields
  * @param props.hasActionErrored - Indicates if an action has errored (optional)
@@ -28,12 +28,12 @@ interface JourneyFormStepProps<T extends Schema>
  * - The form fields rendered by the `render` function
  * - The bottom navigation buttons
  */
-export function JourneyFormStep<T extends z.Schema>({
+export function JourneyStepForm<T extends z.Schema>({
   render,
   schema,
   onSubmitOverride,
   hasActionErrored,
-}: JourneyFormStepProps<T>) {
+}: JourneyStepFormProps<T>) {
   const { previousStepRoute, nextStepRoute, journey, currentStepRoute } =
     useJourneyNavigation()
   const { form, onSubmit: defaultOnSubmit } = useJourneyForm({

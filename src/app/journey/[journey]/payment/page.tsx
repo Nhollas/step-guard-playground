@@ -1,7 +1,7 @@
 "use client"
 
 import { advanceJourneyStepAction } from "@/actions/advanceJourneyStepAction"
-import { JourneyFormStep } from "@/components/journey-form-step"
+import { JourneyStepForm } from "@/components/journey-step-form"
 import { useJourneyNavigation } from "@/hooks/use-journey-navigation"
 import { usePurchaseProductsMutation } from "@/hooks/use-purchase-products-mutation"
 import { useJourneyStore } from "@/providers/journey-store-provider"
@@ -24,7 +24,7 @@ export default function PaymentPage() {
   }
 
   return (
-    <JourneyFormStep
+    <JourneyStepForm
       schema={paymentStepSchema}
       onSubmitOverride={onSubmit}
       hasActionErrored={isError}
