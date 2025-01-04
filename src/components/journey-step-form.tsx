@@ -24,12 +24,12 @@ export function JourneyStepForm<T extends z.Schema>({
   onSubmitOverride,
   hasActionErrored,
 }: JourneyStepFormProps<T>) {
-  const { previousStepRoute, nextStepRoute, journey, currentStepRoute } =
+  const { previousStepRoute, nextNavigation, journey, currentStepRoute } =
     useJourneyNavigation()
   const { form, onSubmit: defaultOnSubmit } = useJourneyForm({
     journey,
     schema,
-    nextStepRoute,
+    nextStepRoute: nextNavigation.route,
     currentStepRoute,
   })
   const {
@@ -54,6 +54,7 @@ export function JourneyStepForm<T extends z.Schema>({
           isLoading={isLoading}
           previousStepRoute={previousStepRoute}
           isError={isError}
+          nextNavigation={nextNavigation}
         />
       </form>
     </Form>

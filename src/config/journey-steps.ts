@@ -1,14 +1,15 @@
 import { Journey } from "@/types"
 import { PROGRESS_COOKIE_NAME } from "./route-guards"
 
-const ASSUMPTIONS_STEP = "assumptions"
-const USER_DETAILS_STEP = "user-details"
-const HOME_DETAILS_STEP = "home-details"
-const CAR_DETAILS_STEP = "car-details"
-const QUOTE_STEP = "quote"
-const PAYMENT_STEP = "payment"
-const SUCCESS_STEP = "success"
-const INTRODUCTION_STEP = "introduction"
+export const ASSUMPTIONS_STEP = "assumptions"
+export const USER_DETAILS_STEP = "user-details"
+export const HOME_DETAILS_STEP = "home-details"
+export const CAR_DETAILS_STEP = "car-details"
+export const QUOTE_STEP = "quote"
+export const PAYMENT_STEP = "payment"
+export const SUCCESS_STEP = "success"
+export const INTRODUCTION_STEP = "introduction"
+export const SUMMARY_STEP = "summary"
 
 export type JourneyStep =
   | typeof ASSUMPTIONS_STEP
@@ -19,6 +20,7 @@ export type JourneyStep =
   | typeof PAYMENT_STEP
   | typeof SUCCESS_STEP
   | typeof INTRODUCTION_STEP
+  | typeof SUMMARY_STEP
 
 const journeySteps: Record<Journey, JourneyStep[]> = {
   apple: [
@@ -27,6 +29,7 @@ const journeySteps: Record<Journey, JourneyStep[]> = {
     USER_DETAILS_STEP,
     HOME_DETAILS_STEP,
     CAR_DETAILS_STEP,
+    SUMMARY_STEP,
     QUOTE_STEP,
     PAYMENT_STEP,
     SUCCESS_STEP,
@@ -35,6 +38,7 @@ const journeySteps: Record<Journey, JourneyStep[]> = {
     INTRODUCTION_STEP,
     ASSUMPTIONS_STEP,
     CAR_DETAILS_STEP,
+    SUMMARY_STEP,
     QUOTE_STEP,
     PAYMENT_STEP,
     SUCCESS_STEP,
@@ -44,7 +48,7 @@ const journeySteps: Record<Journey, JourneyStep[]> = {
 const findRouteIndex = (routes: string[], currentPathname: string): number =>
   routes.findIndex((route) => route === currentPathname)
 
-const createJourneyRoute = (journey: Journey, step: JourneyStep) =>
+export const createJourneyRoute = (journey: Journey, step: JourneyStep) =>
   `/journey/${journey}/${step}`
 
 const getRelativeJourneyRoute = (
@@ -79,3 +83,11 @@ export const getFirstJourneyRoute = (journey: Journey) =>
 
 export const getJourneyProgressCookieName = (journey: Journey) =>
   `${journey}-${PROGRESS_COOKIE_NAME}`
+
+export const getRoutesBeforeSummary = (journey: Journey): string[] => {
+  const allRoutes = getOrderedJourneyStepRoutes(journey)
+  const summaryStepRoute = createJourneyRoute(journey, SUMMARY_STEP)
+  const summaryIndex = allRoutes.indexOf(summaryStepRoute)
+
+  return allRoutes.slice(0, summaryIndex)
+}

@@ -5,14 +5,27 @@ import {
 } from "@/config/journey-steps"
 import { extractJourneyFromPathname } from "@/lib/extract-journey-from-pathname"
 import { Journey } from "@/types"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 
 interface JourneyNavigation {
   journey: Journey
-  nextStepRoute?: string
+  nextNavigation: NextNavigation
   previousStepRoute?: string
   currentStepRoute: string
 }
+
+interface ContinueNavigation {
+  type: "continue"
+  route?: string
+}
+
+interface ReturnNavigation {
+  type: "return"
+  route: string
+  text: string
+}
+
+export type NextNavigation = ContinueNavigation | ReturnNavigation
 
 /**
  * Custom hook for journey navigation management
@@ -29,13 +42,28 @@ interface JourneyNavigation {
  */
 export function useJourneyNavigation(): JourneyNavigation {
   const urlPathname = usePathname()
+  const searchParams = useSearchParams()
   const journey = extractJourneyFromPathname(urlPathname)
+  const returnTo = searchParams.get("returnTo")
+  const returnText = searchParams.get("returnText")
   const nextStepRoute = getNextJourneyRoute(urlPathname, journey)
   const previousStepRoute = getPreviousJourneyRoute(urlPathname, journey)
 
+  const nextNavigation: NextNavigation =
+    returnTo && returnText
+      ? {
+          route: returnTo,
+          type: "return",
+          text: returnText,
+        }
+      : {
+          route: nextStepRoute,
+          type: "continue",
+        }
+
   return {
     journey,
-    nextStepRoute,
+    nextNavigation,
     previousStepRoute,
     currentStepRoute: urlPathname,
   }

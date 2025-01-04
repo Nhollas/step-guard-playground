@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button"
+import { NextNavigation } from "@/hooks/use-journey-navigation"
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 
 interface BottomNavigationProps {
   isLoading: boolean
-  previousStepRoute?: string
   isError?: boolean
+  previousStepRoute?: string
+  nextNavigation: NextNavigation
 }
 
 /**
@@ -21,6 +24,7 @@ export const BottomNavigation = ({
   isLoading,
   previousStepRoute,
   isError,
+  nextNavigation,
 }: BottomNavigationProps) => {
   const nextButtonText = isError
     ? "Action Errored"
@@ -42,8 +46,18 @@ export const BottomNavigation = ({
           "Back"
         )}
       </Button>
-      <Button disabled={isLoading} type="submit">
-        {nextButtonText}
+      <Button
+        disabled={isLoading}
+        type={nextNavigation.type === "return" ? "button" : "submit"}
+        asChild={nextNavigation.type === "return"}
+      >
+        {nextNavigation.type === "return" && nextNavigation.route ? (
+          <Link href={nextNavigation.route}>
+            {nextNavigation.text} <ArrowRight />
+          </Link>
+        ) : (
+          nextButtonText
+        )}
       </Button>
     </div>
   )
