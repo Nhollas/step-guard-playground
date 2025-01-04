@@ -10,24 +10,14 @@ import { BottomNavigation } from "./bottom-navigation"
 
 interface JourneyStepFormProps<T extends Schema>
   extends Pick<UseJourneyFormProps<T>, "schema"> {
+  /** Function to render the form fields */
   render: (form: UseFormReturn<z.infer<T>>) => ReactNode
+  /** Function to optionally override the default form submission */
   onSubmitOverride?: (values: z.infer<T>) => void
+  /** Indicates if an action has errored */
   hasActionErrored?: boolean
 }
 
-/**
- * JourneyStepForm component to render a form step within a journey
- * @template T - The Zod schema type
- * @param props.render - Function to render the form fields
- * @param props.hasActionErrored - Indicates if an action has errored (optional)
- * @param props.schema - The Zod schema for form validation
- * @param props.nextStepRouteSegment - The next step route segment, e.g. `user-details` or `cover-details` (optional)
- * @param props.handlePurchaseProducts - Function to handle purchase products, pass this when the form is the last step (optional)
- *
- * @returns A JSX element containing:
- * - The form fields rendered by the `render` function
- * - The bottom navigation buttons
- */
 export function JourneyStepForm<T extends z.Schema>({
   render,
   schema,

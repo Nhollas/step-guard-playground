@@ -37,7 +37,11 @@ export const startJourneyAction = async (journey: Journey) => {
       new Set([...existingSteps, startingJourneyRoute, nextStepRoute]),
     )
     const progressToken = await encodeProgressToken(updatedProgress)
-    cookieStore.set(journeyProgressCookieName, progressToken)
+    cookieStore.set(journeyProgressCookieName, progressToken, {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "strict",
+    })
   }
 
   return redirect(nextStepRoute)

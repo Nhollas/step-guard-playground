@@ -6,13 +6,7 @@ import { useJourneyNavigation } from "@/hooks/use-journey-navigation"
 import { useJourneyStore } from "@/providers/journey-store-provider"
 import { z } from "zod"
 
-const introductionStepSchema = z.object({
-  name: z.string().nonempty("Name is required").default("Nicholas"),
-  email: z
-    .string()
-    .email("Invalid email address")
-    .default("nicholas.hollas@yahoo.co.uk"),
-})
+const introductionStepSchema = z.object({})
 
 type IntroductionStepSchema = z.infer<typeof introductionStepSchema>
 

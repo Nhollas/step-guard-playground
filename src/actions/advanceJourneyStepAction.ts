@@ -36,6 +36,7 @@ export const advanceJourneyStepAction = async (
   cookieStore.set(journeyProgressCookieName, progressToken, {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
+    sameSite: "strict",
   })
 
   return redirect(nextStepRoute)

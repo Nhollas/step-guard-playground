@@ -9,24 +9,16 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 export interface UseJourneyFormProps<T extends z.Schema> {
+  /** The Zod schema for form validation */
   schema: T
+  /** The journey the user is on. */
   journey: Journey
+  /** The route to the next step if available */
   nextStepRoute?: string
+  /** The route the user is currently on */
   currentStepRoute: string
 }
 
-/**
- * Custom hook to manage journey form state and submission
- * @template T - The Zod schema type
- * @param props.schema - The Zod schema for form validation
- * @param props.journey - The journey object containing step information
- * @param props.nextStepRoute - The full route to the next step (optional)
- * @param props.currentStepRoute - The full route to the current step
- *
- * @returns An object containing:
- * - form: The form object from react-hook-form
- * - onSubmit: The submit handler for advancing to the next step
- */
 export function useJourneyForm<T extends z.Schema>({
   schema,
   journey,
