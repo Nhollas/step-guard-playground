@@ -38,7 +38,9 @@ export default function RootLayout({
               className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
             >
               <Header />
-              <main className="h-[calc(100vh-4rem)]">{children}</main>
+              <main className="h-[calc(100vh-4rem)]">
+                <Suspense>{children}</Suspense>
+              </main>
               <Toaster />
               <Suspense>
                 <StepGuardToast />
