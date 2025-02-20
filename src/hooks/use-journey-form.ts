@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useSyncFormWithStore } from "./use-sync-form-with-store"
 
 export interface UseJourneyFormProps<T extends z.Schema> {
   /** The Zod schema for form validation */
@@ -41,6 +42,8 @@ export function useJourneyForm<T extends z.Schema>({
       ...data,
     },
   })
+
+  useSyncFormWithStore(form, storeData)
 
   const onSubmit = async (values: z.infer<T>) => {
     storeData(values)
